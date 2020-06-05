@@ -32,7 +32,7 @@ jobs:
         # The appname to use for deploying/updating
         heroku_app_name: ecoleta-ronney
         # Set if your app is located in a subdirectory.
-        appdir: /server
+        appdir: ./server
         dontuseforce: 1
 
    
