@@ -9,7 +9,7 @@ class ItemsController {
             return {
                 id: item.id,
                 title: item.title,
-                image_url: `http://934ee01d1322.ngrok.io/uploads/${item.image}`
+                image_url: `http://6fef26bccfcb.ngrok.io/uploads/${item.image}`
             };
     
         });

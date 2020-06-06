@@ -14,6 +14,7 @@ interface Data {
     point: {
         name: string,
         image: string,
+        image_url: string,
         email: string,
         whatsapp: string,
         city: string,
@@ -67,7 +68,7 @@ const Detail = () => {
                         onPress={handleNavigateBack} />
                 </TouchableOpacity>
 
-                <Image style={styles.pointImage} source={{ uri: data.point.image }}></Image>
+                <Image style={styles.pointImage} source={{ uri: data.point.image_url }}></Image>
                 <Text style={styles.pointName}>
                     {data.point.name}
                 </Text>

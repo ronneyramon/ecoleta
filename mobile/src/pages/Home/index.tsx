@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, ImageBackground, Image, StyleSheet, Text, Button, SafeAreaView, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useEffect, useReducer, useRef } from 'react';
+import { View, ImageBackground, Image, StyleSheet, Text, Button, SafeAreaView, TextInput, KeyboardAvoidingView, Platform, Animated, Keyboard } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler'
 import { Feather as Icon } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native';
@@ -8,17 +8,53 @@ const Home = () => {
     const navigation = useNavigation();
     const [uf, setUf] = useState('');
     const [city, setCity] = useState('');
+    const descriptionOpacity = useRef(new Animated.Value(100)).current;
+    const titleMarginTop = useRef(new Animated.Value(64)).current;
+
+
+    useEffect(() => {
+        Keyboard.addListener('keyboardWillShow', event => {
+
+            Animated.parallel([
+                Animated.timing(titleMarginTop, {
+                    duration: event.duration,
+                    toValue: 20,
+                }),
+                Animated.timing(descriptionOpacity, {
+                    duration: event.duration,
+                    toValue: 0,
+                })
+            ]).start();
+        });
+
+    }, []);
+
+    useEffect(() => {
+        Keyboard.addListener('keyboardWillHide', event => {
+            Animated.timing(descriptionOpacity, {
+                duration: event.duration,
+                toValue: 100,
+            }).start();
+            Animated.timing(descriptionOpacity, {
+                duration: event.duration,
+                toValue: 100,
+            }).start();
+        });
+    }, []);
 
 
     function handleNavigateToPoints() {
-        navigation.navigate('Points',{
+        navigation.navigate('Points', {
             uf,
             city
         });
     }
 
+
+
     return (
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+
             <SafeAreaView style={{ flex: 1 }}>
                 <ImageBackground
                     style={styles.container}
@@ -28,8 +64,21 @@ const Home = () => {
                     <View style={styles.main}>
                         <Image source={require('../../assets/logo.png')} />
                         <View>
-                            <Text style={styles.title} >Seu marketplace de coleta de resíduos</Text>
-                            <Text style={styles.description}>Ajudamos pessoa a encontrarem pontos de coleta de forma eficiente</Text>
+                            <Animated.Text style={
+                                [styles.title,
+                                {
+                                    marginTop: titleMarginTop
+                                }]}>
+                                Seu marketplace {'\n'}de coleta de {'\n'}resíduos</Animated.Text>
+                            <Animated.Text
+                                style={[
+                                    styles.description,
+                                    {
+                                        opacity: descriptionOpacity
+                                    }
+
+                                ]}>
+                                Ajudamos pessoa a encontrarem pontos de coleta de forma eficiente</Animated.Text>
                         </View>
                     </View>
                     <View style={styles.footer}>
